@@ -14,21 +14,21 @@
 // import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import CurrentSong from "@/components/CurrentSong";
 import SongList from "@/components/SongList";
-// import _ from "lodash";
+import _ from "lodash";
 // import axios from "axios";
-import { mapState } from "vuex";
+// import { mapState } from "vuex";
 export default {
   name: "app",
   data() {
     return {
-      // currentSong: null,
-      audioElement: null
-      // songs: null
+      currentSong: null,
+      audioElement: null,
+      songs: null
     };
   },
-  computed: {
-    ...mapState(["songs", "currentSong"])
-  },
+  // computed: {
+  //   ...mapState(["songs", "currentSong"])
+  // },
   methods: {
     handlePlay: function(payload) {
       if (this.audioElement == null) {
@@ -46,22 +46,22 @@ export default {
           this.audioElement.play();
         }
       }
-      this.$store.dispatch("changeSong", payload);
-      // this.currentSong = payload;
+      // this.$store.dispatch("changeSong", payload);
+      this.currentSong = payload;
       this.audioElement.addEventListener("ended", () => {
-        this.$store.dispatch("changeSong", null);
-        // this.currentSong = null;
+        // this.$store.dispatch("changeSong", null);
+        this.currentSong = null;
         this.audioElement = null;
       });
     },
     handleDelete: function(payload) {
-      this.$store.dispatch("deleteSong", payload);
-      // const updatedArray = _.without(this.songs, payload);
-      // this.songs = updatedArray;
+      // this.$store.dispatch("deleteSong", payload);
+      const updatedArray = _.without(this.songs, payload);
+      this.songs = updatedArray;
     }
   },
   created() {
-    this.$store.dispatch("fetchSongs");
+    // this.$store.dispatch("fetchSongs");
 
     // axios({
     //   method: "get",
@@ -79,13 +79,13 @@ export default {
     // );
 
     // using the fetch api method
-    // fetch("./data.json")
-    //   .then(response => response.json())
-    //   .then(response => {
-    //     this.songs = response;
-    //   })
-    //   // eslint-disable-next-line no-console
-    //   .catch(error => console.log(error));
+    fetch("./data.json")
+      .then(response => response.json())
+      .then(response => {
+        this.songs = response;
+      })
+      // eslint-disable-next-line no-console
+      .catch(error => console.log(error));
   },
   components: {
     // FontAwesomeIcon,
